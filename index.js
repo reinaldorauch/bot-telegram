@@ -4,7 +4,7 @@ const TOKEN = process.env.TOKEN;
 const WEBHOOK_URL = process.env.WEBHOOK_URL || 'https://<app_name>.herokuapp.com:443';
 
 const bot = new TelegramBot(TOKEN, {
-  webhook: {
+  webHook: {
     port: process.env.PORT || 443
   }
 });
@@ -20,7 +20,7 @@ bot.onText(/\/echo (.+)/, (msg, match) => {
 });
 
 // Listen for 'photos'.
-bot.on('photo', (msg) => {  
+bot.on('photo', (msg) => {
   const chatId = process.env.CHATID; // Group ID;
   if (msg.chat.id === msg.from.id) { // Only forward messages from real people
       // Send the photo to the group
@@ -29,9 +29,15 @@ bot.on('photo', (msg) => {
 });
 
 // Listen for 'videos'.
-bot.on('video', (msg) => {  
+bot.on('video', (msg) => {
   const chatId = process.env.CHATID; // Group ID;
   if (msg.chat.id === msg.from.id) { // Only forward messages from real people
     bot.sendVideo(chatId, msg.video.file_id);
   }
 });
+
+// Handling the error;
+bot.on('error', e => console.error(e.stack));
+
+// Echoing back the message
+bot.on('message', m => bot.sendMessage(m.chat.id, `Sua mensagem foi: ${m.text}`));
