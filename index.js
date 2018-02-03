@@ -1,14 +1,15 @@
 const TelegramBot = require('node-telegram-bot-api');
-var app = require('express')();
 
-const token = process.env.TOKEN;
-const webhook = process.env.WEBHOOK_URL;
-var port = process.env.PORT || 8443;
-const bot = new TelegramBot(token);
-var port = process.env.PORT || 8080;
-var io = require('socket.io').listen(app.listen(port));
+const TOKEN = process.env.TOKEN;
+const WEBHOOK_URL = process.env.WEBHOOK_URL || 'https://<app_name>.herokuapp.com:443';
 
-bot.setWebhook(webhook);
+const bot = new TelegramBot(TOKEN, {
+  webhook: {
+    port: process.env.PORT || 443
+  }
+});
+
+bot.setWebHook(`${WEBHOOK_URL}/bot${TOKEN}`);
 
 // Matches "/echo [whatever]"
 bot.onText(/\/echo (.+)/, (msg, match) => {
