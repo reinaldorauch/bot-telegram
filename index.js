@@ -32,3 +32,6 @@ bot.on('video', (msg) => {
     bot.sendVideo(chatId, msg.video.file_id);
   }
 });
+
+
+const interval = setInterval(() => console.log('Keep alive'), 1000);
