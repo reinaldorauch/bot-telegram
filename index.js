@@ -2,11 +2,13 @@ const TelegramBot = require('node-telegram-bot-api');
 var app = require('express')();
 
 const token = process.env.TOKEN;
+const webhook = process.env.WEBHOOK_URL;
 var port = process.env.PORT || 8443;
-const bot = new TelegramBot(token, {polling: true});
+const bot = new TelegramBot(token);
 var port = process.env.PORT || 8080;
 var io = require('socket.io').listen(app.listen(port));
 
+bot.setWebhook(webhook);
 
 // Matches "/echo [whatever]"
 bot.onText(/\/echo (.+)/, (msg, match) => {
@@ -32,6 +34,3 @@ bot.on('video', (msg) => {
     bot.sendVideo(chatId, msg.video.file_id);
   }
 });
-
-
-const interval = setInterval(() => console.log('Keep alive'), 1000);
